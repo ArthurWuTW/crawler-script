@@ -21,6 +21,10 @@ base64_str = base64.b64encode(base64_str)
 
 print(base64_str)
 
+print("-----------------decode utf-8---------")
+print(base64_str.decode("utf-8"))
+
+
 imgString = base64.b64decode(base64_str)
 nparr = np.fromstring(imgString, np.uint8)
 image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
