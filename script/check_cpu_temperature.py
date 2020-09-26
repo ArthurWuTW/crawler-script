@@ -20,5 +20,9 @@ while True:
     ip = "http://10.1.1.16:8000"
     data = "/cpuTemperature/"+str(temp)
 
-    r = requests.get(ip+data)
+    try:
+        r = requests.get(ip+data)
+    except:
+        pass
+
     time.sleep(60)
