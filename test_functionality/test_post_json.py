@@ -1,7 +1,69 @@
 import cv2
-cap = cv2.VideoCapture(0)
 
+def Growth_Estimate(img):
+    data = list()
+    plants = [
+        {
+            "id":1,
+            "seed_num":1,
+            "center_pt": tuple([366, 425]),
+            "edge_pt": tuple([362, 363])
+        },
+        {
+            "id":2,
+            "seed_num":2,
+            "center_pt": tuple([360, 235]),
+            "edge_pt": tuple([355, 296])
+        },
+        {
+            "id":3,
+            "seed_num":1,
+            "center_pt": tuple([353, 72]),
+            "edge_pt": tuple([343, 118])
+        }
+
+    ]
+    img = cv2.GaussianBlur(img, (3,3), 0)
+    b, g, r = cv2.split(img)
+    ret, thresh = cv2.threshold(g, 127, 255, cv2.THRESH_BINARY)
+
+    for plant in plants:
+        print(plant)
+
+        # Create mask image
+        radius = int(math.sqrt((plant['center_pt'][0]-plant['edge_pt'][0])**2+(plant['center_pt'][1]-plant['edge_pt'][1])**2))
+        center = plant['center_pt']
+
+        size = g.shape
+        mask = np.zeros(size, np.uint8)
+        cv2.circle(mask, center, radius, (255, 255, 255), -1)
+
+        # Bitwise_and
+        result = cv2.bitwise_and(thresh, thresh, mask=mask)
+
+        # Calculate Percentage
+        print("result shape", result.shape)
+        nonzero_count = cv2.countNonZero(result)
+        print(nonzero_count)
+
+        circle_area = cv2.countNonZero(mask)
+        print(nonzero_count/float(circle_area))
+
+        data.append({
+            "id": plant['id'],
+            "grouth_rate": nonzero_count/float(circle_area)
+        })
+
+    return data
+
+
+cap = cv2.VideoCapture(0)
 ret, frame = cap.read()
+growth_data = Growth_Estimate(frame)
+
+
+print("growth_data", growth_data)
+
 height, width, channels = frame.shape
 print(height, width, channels)
 print(frame)
@@ -31,5 +93,3 @@ print(headers)
 r = requests.post(url, data=json.dumps(data), headers=headers)
 
 print("response text", r.text)
-
-

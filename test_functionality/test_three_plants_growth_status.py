@@ -7,20 +7,20 @@ plants = [
     {
         "id":1,
         "seed_num":1,
-        "center_pt": tuple([123, 456]),
-        "edge_pt": tuple([333, 333])
+        "center_pt": tuple([366, 425]),
+        "edge_pt": tuple([362, 363])
     },
     {
         "id":2,
         "seed_num":2,
-        "center_pt": tuple([123, 456]),
-        "edge_pt": tuple([333, 333])
+        "center_pt": tuple([360, 235]),
+        "edge_pt": tuple([355, 296])
     },
     {
         "id":3,
         "seed_num":1,
-        "center_pt": tuple([123, 456]),
-        "edge_pt": tuple([333, 333])
+        "center_pt": tuple([353, 72]),
+        "edge_pt": tuple([343, 118])
     }
 
 ]
@@ -54,9 +54,10 @@ for plant in plants:
     cv2.waitKey(0)
 
     # Calculate Percentage
+    print("result shape", result.shape)
     nonzero_count = cv2.countNonZero(result)
     print(nonzero_count)
 
-    circle_area = 3.14*radius**2
+    circle_area = cv2.countNonZero(mask)
 
-    print(nonzero_count/circle_area)
+    print(nonzero_count/float(circle_area))

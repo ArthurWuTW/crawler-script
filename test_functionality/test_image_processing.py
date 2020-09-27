@@ -41,7 +41,7 @@ cv2.waitKey(0)
 
 nonzero = cv2.countNonZero(res)
 print(nonzero)
-circle_area = 3.14*radius**2
+circle_area = cv2.countNonZero(mask)
 
 print(nonzero/circle_area)
 
