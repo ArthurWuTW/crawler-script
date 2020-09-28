@@ -1,6 +1,7 @@
 import cv2
 import math
 import numpy as np
+import time
 
 def Growth_Estimate(img):
     data = list()
@@ -58,40 +59,40 @@ def Growth_Estimate(img):
 
     return data
 
-
-cap = cv2.VideoCapture(0)
-ret, frame = cap.read()
-growth_data = Growth_Estimate(frame)
-
-
-print("growth_data", growth_data)
-
-height, width, channels = frame.shape
-print(height, width, channels)
-print(frame)
-
-import base64
-base64_str = cv2.imencode('.jpg', frame)[1].tostring()
-base64_str = base64.b64encode(base64_str)
-
-base64_str_decod_utf_8 = base64_str.decode("utf-8")
+while(True):
+    cap = cv2.VideoCapture(0)
+    ret, frame = cap.read()
+    growth_data = Growth_Estimate(frame)
 
 
-import json
-import requests
+    print("growth_data", growth_data)
 
-url = 'http://10.1.1.16:8000/receiveImage'
-data = {
-        'image': base64_str_decod_utf_8,
-        'data': tuple(growth_data)
-        }
+    height, width, channels = frame.shape
+    print(height, width, channels)
+    print(frame)
 
-print(data)
+    import base64
+    base64_str = cv2.imencode('.jpg', frame)[1].tostring()
+    base64_str = base64.b64encode(base64_str)
 
-headers = {'content-type': 'application/json'}
+    base64_str_decod_utf_8 = base64_str.decode("utf-8")
 
-print(headers)
 
-r = requests.post(url, data=json.dumps(data), headers=headers)
+    import json
+    import requests
 
-print("response text", r.text)
+    url = 'http://10.1.1.16:8000/receiveImage'
+    data = {
+            'image': base64_str_decod_utf_8,
+            'data': tuple(growth_data)
+            }
+
+    print(data)
+
+    headers = {'content-type': 'application/json'}
+
+    print(headers)
+
+    r = requests.post(url, data=json.dumps(data), headers=headers)
+
+    time.sleep(60*60*24)
