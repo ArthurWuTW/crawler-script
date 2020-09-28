@@ -28,7 +28,7 @@ def Growth_Estimate(img):
     ]
     img = cv2.GaussianBlur(img, (3,3), 0)
     b, g, r = cv2.split(img)
-    ret, thresh = cv2.threshold(g, 127, 255, cv2.THRESH_BINARY)
+    ret, thresh = cv2.threshold(g, 100, 255, cv2.THRESH_BINARY)
 
     for plant in plants:
         print(plant)
