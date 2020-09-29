@@ -15,17 +15,20 @@ def Growth_Estimate(img):
         {
             "id":2,
             "seed_num":2,
-            "center_pt": tuple([360, 235]),
-            "edge_pt": tuple([355, 296])
+            "center_pt": tuple([363, 208]),
+            "edge_pt": tuple([359, 273])
         },
         {
             "id":3,
             "seed_num":1,
-            "center_pt": tuple([353, 72]),
-            "edge_pt": tuple([343, 118])
+            "center_pt": tuple([348, 40]),
+            "edge_pt": tuple([350, 98])
         }
 
     ]
+    
+    radius = int(math.sqrt((plants[0]['center_pt'][0]-plants[0]['edge_pt'][0])**2+(plants[0]['center_pt'][1]-plants[0]['edge_pt'][1])**2))
+
     img = cv2.GaussianBlur(img, (3,3), 0)
     b, g, r = cv2.split(img)
     ret, thresh = cv2.threshold(g, 100, 255, cv2.THRESH_BINARY)
@@ -34,7 +37,6 @@ def Growth_Estimate(img):
         print(plant)
 
         # Create mask image
-        radius = int(math.sqrt((plant['center_pt'][0]-plant['edge_pt'][0])**2+(plant['center_pt'][1]-plant['edge_pt'][1])**2))
         center = plant['center_pt']
 
         size = g.shape
