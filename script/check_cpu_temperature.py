@@ -24,5 +24,5 @@ while True:
         r = requests.get(ip+data)
     except:
         pass
-
-    time.sleep(60)
+    break
+    #time.sleep(60)
