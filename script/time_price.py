@@ -37,6 +37,6 @@ while True:
               r = requests.get(ip+data)
           except:
               print("failed to connect to server")
-              pass
-  time.sleep(60*60*24)
+              break
+  break
 
