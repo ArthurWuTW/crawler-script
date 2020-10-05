@@ -12,7 +12,8 @@ try:
         time.sleep(2)
         print('off')
         GPIO.output(GPIO_PIN, GPIO.LOW)
-        time.sleep(30)
+        time.sleep(5)
+        break
 except KeyboardInterrupt:
     print('aaa')
 finally:
