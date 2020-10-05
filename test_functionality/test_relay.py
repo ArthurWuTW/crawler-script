@@ -9,10 +9,10 @@ try:
     while True:
         print('on')
         GPIO.output(GPIO_PIN, GPIO.HIGH)
-        time.sleep(1)
+        time.sleep(2)
         print('off')
         GPIO.output(GPIO_PIN, GPIO.LOW)
-        time.sleep(1)
+        time.sleep(30)
 except KeyboardInterrupt:
     print('aaa')
 finally:
