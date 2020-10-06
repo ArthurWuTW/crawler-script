@@ -32,5 +32,6 @@ while True:
   data = '/humidity/'+ humidity
   r = requests.get(ip+data)
 
-  time.sleep(60*30)
+  #time.sleep(60*30)
+  break
 
