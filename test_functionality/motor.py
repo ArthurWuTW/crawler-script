@@ -18,18 +18,18 @@ import cv2
 from cv2 import aruco
 
 def arucoCenterDetection(image):
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
     parameters =  aruco.DetectorParameters_create()
     corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
     
     center_points_dict_array = list()
     for i in range(len(ids)):
-        c = cornors[i][0]
+        c = corners[i][0]
 
         center_point = dict()
-        center_point['id'] = ids[i]
-        center_point['center_point'] = [c[:, 0].mean()], [c[:, 1].mean()]
+        center_point['id'] = ids[i][0]
+        center_point['center_point'] = [c[:, 0].mean(), c[:, 1].mean()]
         center_points_dict_array.append(center_point)
     
     return center_points_dict_array
@@ -45,6 +45,7 @@ try:
     while True:
 
         image = get_image_frame()
+        print(image.shape)
         center_point_array = arucoCenterDetection(image)
         print(center_point_array)
 
@@ -54,7 +55,7 @@ try:
         #print('backward')
         #backward()
         #time.sleep(5)
-        #break
+        break
 except KeyboardInterrupt:
     print('aaa')
 finally:
