@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
  
-In1, In2 = 6, 5
+In1, In2 = 9, 10
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(In1, GPIO.OUT)
 GPIO.setup(In2, GPIO.OUT)
@@ -70,9 +70,9 @@ try:
                     print("left side!")
                     print(center_points['center_point'])
                     backward()
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     initial_gpio()
-                else:
+                elif(center_points['center_point'][0] > 320):
                     print("right side")
                     print(center_points['center_point'])
                     forward()
