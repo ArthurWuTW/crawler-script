@@ -6,6 +6,10 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(In1, GPIO.OUT)
 GPIO.setup(In2, GPIO.OUT)
 
+def initial_gpio():
+    GPIO.output(In1, GPIO.LOW)
+    GPIO.output(In2, GPIO.LOW)
+
 def forward():
     GPIO.output(In1, GPIO.HIGH)
     GPIO.output(In2, GPIO.LOW)
@@ -36,6 +40,7 @@ def arucoCenterDetection(image):
 
 
 capturing = cv2.VideoCapture(0)
+initial_gpio()
 
 def get_image_frame():
     _, frame = capturing.read()
@@ -49,6 +54,14 @@ try:
         center_point_array = arucoCenterDetection(image)
         print(center_point_array)
 
+        for center_points in center_point_array:
+            if(center_points['id'] == 1):
+                print("id is 1!")
+
+                if(center_points['center_point'][0] < image.shape[1]):
+                    print("left side!")
+                    forward()
+                    time.sleep(2)
         #print('forward')
         #forward()
         #time.sleep(5)
