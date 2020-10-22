@@ -48,43 +48,31 @@ def get_image_frame():
     _, frame = capturing.read()
     return frame
 
-count = 0
-
 try:
-    while True:
-
-        capturing = None
-
-        capturing = cv2.VideoCapture(0)
-
-        image = get_image_frame()
-        #print(image.shape)
-        center_point_array = arucoCenterDetection(image)
-        #print(center_point_array)
-
-        for center_points in center_point_array:
-            if(center_points['id'] == 1):
-                print("id is 1!")
-
-                if(center_points['center_point'][0] < 320):
-                    print("left side!")
-                    print(center_points['center_point'])
-                    backward()
-                    time.sleep(0.3)
-                    initial_gpio()
-                elif(center_points['center_point'][0] > 320):
-                    print("right side")
-                    print(center_points['center_point'])
-                    forward()
-                    time.sleep(0.5)
-                    initial_gpio()
+    for i in [4, 3, 2, 1]:
+        count = 0
+        print(i)
+        while True:
+            capturing = None
+            capturing = cv2.VideoCapture(0)
+            image = get_image_frame()
+            center_point_array = arucoCenterDetection(image)
+            for center_points in center_point_array:
+                if(center_points['id'] == i):
+                    count += 1
+                    if(center_points['center_point'][0] < 320):
+                        print("left")
+                        backward()
+                        time.sleep(0.3)
+                        initial_gpio()
+                    elif(center_points['center_point'][0] > 320):
+                        print("right")
+                        forward()
+                        time.sleep(0.5)
+                        initial_gpio()
+                    break
+            if(count == 60):
                 break
-        #print('forward')
-        #forward()
-        #time.sleep(5)
-        #print('backward')
-        #backward()
-        #time.sleep(5)
 except KeyboardInterrupt:
     print('aaa')
 finally:
