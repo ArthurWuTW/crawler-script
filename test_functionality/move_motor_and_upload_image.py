@@ -43,7 +43,7 @@ class ImageGrabber():
         _, frame = self.grabber.read()
         return frame
 
-class ArucoLibraray():
+class ArucoLibrary():
     def __init__(self):
         self.ARUCO = aruco
 
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     motor = Motor(9, 10)
     motor.stop()
     imageGrabber = ImageGrabber(0)
-    arucoLib = ArucoLibraray()
+    arucoLib = ArucoLibrary()
     imagePoster = ImagePoster('http://10.1.1.16:8000/receiveImage')
 
     arucoIdArray = [6, 5, 4, 3, 2, 1]
@@ -97,8 +97,8 @@ if __name__ == '__main__':
                 imageGrabber.resetCaputringConfiguration(0)
                 image = imageGrabber.getImageFrame()
                 _, width, _ = image.shape
-                cornersArray, idsArray = ArucoLibraray.detectArucoCorner(image)
-                centerPointsArray = ArucoLibraray.getCenterPoints(cornersArray, idsArray)
+                cornersArray, idsArray = ArucoLibrary.detectArucoCorner(image)
+                centerPointsArray = ArucoLibrary.getCenterPoints(cornersArray, idsArray)
                 for center in centerPointsArray:
                     if(center['id'] == id):
                         print(center['x'], center['y'])
