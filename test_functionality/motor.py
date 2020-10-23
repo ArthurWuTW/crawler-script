@@ -49,7 +49,7 @@ def get_image_frame():
     return frame
 
 try:
-    for i in [4, 3, 2, 1]:
+    for i in [6, 5, 4, 3, 2, 1]:
         count = 0
         print(i)
         while True:
@@ -63,15 +63,16 @@ try:
                     if(center_points['center_point'][0] < 320):
                         print("left")
                         backward()
-                        time.sleep(0.3)
+                        time.sleep(0.6)
                         initial_gpio()
                     elif(center_points['center_point'][0] > 320):
                         print("right")
                         forward()
-                        time.sleep(0.5)
+                        time.sleep(0.6)
                         initial_gpio()
+                    print(center_points['center_point'])
                     break
-            if(count == 60):
+            if(count == 100):
                 break
 except KeyboardInterrupt:
     print('aaa')
