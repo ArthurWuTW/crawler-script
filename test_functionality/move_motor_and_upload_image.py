@@ -97,8 +97,8 @@ if __name__ == '__main__':
                 imageGrabber.resetCaputringConfiguration(0)
                 image = imageGrabber.getImageFrame()
                 _, width, _ = image.shape
-                cornersArray, idsArray = ArucoLibrary.detectArucoCorner(image)
-                centerPointsArray = ArucoLibrary.getCenterPoints(cornersArray, idsArray)
+                cornersArray, idsArray = arucoLib.detectArucoCorner(image)
+                centerPointsArray = arucoLib.getCenterPoints(cornersArray, idsArray)
                 for center in centerPointsArray:
                     if(center['id'] == id):
                         print(center['x'], center['y'])
