@@ -36,7 +36,7 @@ class ImageGrabber():
     def __init__(self, id):
         self.grabber = cv2.VideoCapture(id)
 
-    def resetCaputringConfiguration(self, id):
+    def resetCapturingConfiguration(self, id):
         self.grabber = None
         self.grabber = cv2.VideoCapture(id)
 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
             while True:
                 # TODO bugfix: error message - Corrupt JPEG data: 1 extraneous bytes before marker 0xd6
                 # reseting VideoCapture can fix it, but it slows down the whole process
-                imageGrabber.resetCaputringConfiguration(0)
+                imageGrabber.resetCapturingConfiguration(0)
                 image = imageGrabber.getImageFrame()
                 _, width, _ = image.shape
                 cornersArray, idsArray = arucoLib.detectArucoCorner(image)
@@ -110,9 +110,32 @@ if __name__ == '__main__':
                         elif(center['x'] > width/2):
                             motor.forward(0.6)
                         break
-                if(moveCount == 100):
+                if(moveCount == motor.maxStep):
                     imagePoster.postImageArucoid(image, id)
                     break
+        motor.maxStep = 50
+        count = 0
+        while True:
+            imageGrabber.resetCapturingConfiguration(0)
+            image = imageGrabber.getImageFrame()
+            _, width, _ = image.shape
+            cornersArray, idsArray = arucoLib.detectArucoCorner(image)
+            centerPointsArray = arucoLib.getCenterPoints(cornersArray, idsArray)
+            sortedCenterPointsArray = sorted(centerPointsArray, key=lambda k: k['id'])
+
+            backCenterPoint = sortedCenterPointsArray[0]
+            print(backCenterPoint['id'], backCenterPoint['x'], backCenterPoint['y'])
+            if(backCenterPoint['x'] < width/2):
+                motor.backward(0.6)
+            elif(backCenterPoint['x'] > width/2):
+                motor.forward(0.6)
+
+            if(backCenterPoint['id'] == arucoIdArray[0]):
+                count += 1
+                print(count)
+            if(count == motor.maxStep):
+                break
+
     except KeyboardInterrupt:
         print('KeyboardInterrupt')
     finally:
