@@ -101,6 +101,9 @@ if __name__ == '__main__':
                 _, width, _ = image.shape
                 cornersArray, idsArray = arucoLib.detectArucoCorner(image)
                 centerPointsArray = arucoLib.getCenterPoints(cornersArray, idsArray)
+
+                accurateFlag = False
+
                 for center in centerPointsArray:
                     if(center['id'] == id):
                         print(center['x'], center['y'])
@@ -109,8 +112,13 @@ if __name__ == '__main__':
                             motor.backward(0.6)
                         elif(center['x'] > width/2):
                             motor.forward(0.6)
+
+                        if(abs(center['x'] - width/2) <= 2):
+                            accurateFlag = True
+                        
                         break
-                if(moveCount == motor.maxStep):
+
+                if(moveCount == motor.maxStep or accurateFlag):
                     imagePoster.postImageArucoid(image, id)
                     break
         motor.maxStep = 50
@@ -133,8 +141,13 @@ if __name__ == '__main__':
             if(backCenterPoint['id'] == arucoIdArray[0]):
                 count += 1
                 print(count)
-            if(count == motor.maxStep):
+                if(count == motor.maxStep):
+                    break
+            
+            if(abs(backCenterPoint['x'] - width/2) <= 2):
+                print("less than two, move to next id")
                 break
+
 
     except KeyboardInterrupt:
         print('KeyboardInterrupt')
