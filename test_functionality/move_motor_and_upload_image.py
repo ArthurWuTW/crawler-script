@@ -57,14 +57,16 @@ class ArucoLibrary():
 
     def getCenterPoints(self, corners, ids):
         centerPoints = list()
-        for i in range(len(ids)):
-            c = corners[i][0]
-            if(len(c[:, 0]) == 4):
-                centerPoint = dict()
-                centerPoint['id'] = ids[i][0]
-                centerPoint['x'] = c[:, 0].mean()
-                centerPoint['y'] = c[:, 1].mean()
-                centerPoints.append(centerPoint)
+        print(ids)
+        if ids is not None:
+            for i in range(len(ids)):
+                c = corners[i][0]
+                if(len(c[:, 0]) == 4):
+                    centerPoint = dict()
+                    centerPoint['id'] = ids[i][0]
+                    centerPoint['x'] = c[:, 0].mean()
+                    centerPoint['y'] = c[:, 1].mean()
+                    centerPoints.append(centerPoint)
         return centerPoints
 
 class ImagePoster():
@@ -144,7 +146,7 @@ if __name__ == '__main__':
                 if(count == motor.maxStep):
                     break
             
-            if(abs(backCenterPoint['x'] - width/2) <= 2):
+            if(backCenterPoint['id'] == arucoIdArray[0] and abs(backCenterPoint['x'] - width/2) <= 2):
                 print("less than two, move to next id")
                 break
 
