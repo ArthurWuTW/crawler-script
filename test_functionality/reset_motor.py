@@ -86,26 +86,30 @@ if __name__ == '__main__':
             accurateFlag = False
             detectFirstIdFlag = False
 
-            for center in centerPointsArray:
-                if(center['id'] == 1):
-                    detectFirstIdFlag = True
-                    print(center['x'], center['y'])
-                    if(center['x'] < width/2):
-                        motor.backward(0.6)
-                    elif(center['x'] > width/2):
-                        motor.forward(0.6)
+            print(centerPointsArray)
 
-                    if(abs(center['x'] - width/2) <= 20):
-                        accurateFlag = True
+            if centerPointsArray is not None:
+
+              for center in centerPointsArray:
+                  if(center['id'] == 1):
+                      detectFirstIdFlag = True
+                      print(center['x'], center['y'])
+                      if(center['x'] < width/2):
+                          motor.backward(0.6)
+                      elif(center['x'] > width/2):
+                          motor.forward(0.6)
+
+                      if(abs(center['x'] - width/2) <= 20):
+                          accurateFlag = True
                         
-                    break
+                      break
 
-            if(detectFirstIdFlag == False):
-                print("move backward")
-                motor.backward(0.6)
+              if(detectFirstIdFlag == False):
+                  print("move backward")
+                  motor.backward(0.6)
 
-            if(accurateFlag):
-                break
+              if(accurateFlag):
+                  break
 
 
     except KeyboardInterrupt:

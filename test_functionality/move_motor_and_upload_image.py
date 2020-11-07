@@ -14,7 +14,7 @@ class Motor():
         self.gpio.setmode(GPIO.BCM)
         self.gpio.setup(self.input1, GPIO.OUT)
         self.gpio.setup(self.input2, GPIO.OUT)
-        self.maxStep = 100
+        self.maxStep = 200
 
     def stop(self):
         self.gpio.output(self.input1, GPIO.LOW)
@@ -91,9 +91,11 @@ if __name__ == '__main__':
     ip = "http://10.1.1.16:8000/receiveImage"
     imagePoster = ImagePoster(ip)
 
-    arucoIdArray = [1, 2, 3, 4, 5, 6]
+    arucoAllArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    arucoIdArray = [1, 3, 5, 7, 9, 11]
+
     try:
-        for id in arucoIdArray:
+        for id in arucoAllArray:
             moveCount = 0
             while True:
                 # TODO bugfix: error message - Corrupt JPEG data: 1 extraneous bytes before marker 0xd6
@@ -105,6 +107,7 @@ if __name__ == '__main__':
                 centerPointsArray = arucoLib.getCenterPoints(cornersArray, idsArray)
 
                 accurateFlag = False
+                passFlag = False
 
                 for center in centerPointsArray:
                     if(center['id'] == id):
@@ -116,13 +119,21 @@ if __name__ == '__main__':
                             motor.forward(0.6)
 
                         if(abs(center['x'] - width/2) <= 2):
-                            accurateFlag = True
-                        
+                            if center['id'] in arucoIdArray:
+                                accurateFlag = True
+                            else:
+                                passFlag = True
                         break
 
-                if(moveCount == motor.maxStep or accurateFlag):
+                if(passFlag):
+                    break
+
+                if(accurateFlag):
                     imagePoster.postImageArucoid(image, id)
                     break
+                
+                if(moveCount == motor.maxStep):
+                    raise Exception("reach MaxStep, system shutdown!")
         motor.maxStep = 50
         count = 0
         while True:
@@ -132,23 +143,23 @@ if __name__ == '__main__':
             cornersArray, idsArray = arucoLib.detectArucoCorner(image)
             centerPointsArray = arucoLib.getCenterPoints(cornersArray, idsArray)
             sortedCenterPointsArray = sorted(centerPointsArray, key=lambda k: k['id'])
+            if sortedCenterPointsArray is not None:
+              backCenterPoint = sortedCenterPointsArray[0]
+              print(backCenterPoint['id'], backCenterPoint['x'], backCenterPoint['y'])
+              if(backCenterPoint['x'] < width/2):
+                  motor.backward(0.6)
+              elif(backCenterPoint['x'] > width/2):
+                  motor.forward(0.6)
 
-            backCenterPoint = sortedCenterPointsArray[0]
-            print(backCenterPoint['id'], backCenterPoint['x'], backCenterPoint['y'])
-            if(backCenterPoint['x'] < width/2):
-                motor.backward(0.6)
-            elif(backCenterPoint['x'] > width/2):
-                motor.forward(0.6)
-
-            if(backCenterPoint['id'] == arucoIdArray[0]):
-                count += 1
-                print(count)
-                if(count == motor.maxStep):
-                    break
+              if(backCenterPoint['id'] == arucoIdArray[0]):
+                  count += 1
+                  print(count)
+                  if(count == motor.maxStep):
+                      break
             
-            if(backCenterPoint['id'] == arucoIdArray[0] and abs(backCenterPoint['x'] - width/2) <= 2):
-                print("less than two, move to next id")
-                break
+              if(backCenterPoint['id'] == arucoIdArray[0] and abs(backCenterPoint['x'] - width/2) <= 2):
+                  print("less than two, move to next id")
+                  break
 
 
     except KeyboardInterrupt:
