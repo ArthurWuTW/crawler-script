@@ -9,7 +9,7 @@ try:
     while True:
         print('on')
         GPIO.output(GPIO_PIN, GPIO.HIGH)
-        time.sleep(5)
+        time.sleep(8)
         print('off')
         GPIO.output(GPIO_PIN, GPIO.LOW)
         #time.sleep(5)
