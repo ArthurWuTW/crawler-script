@@ -118,7 +118,7 @@ if __name__ == '__main__':
                         elif(center['x'] > width/2):
                             motor.forward(0.6)
 
-                        if(abs(center['x'] - width/2) <= 2):
+                        if(abs(center['x'] - width/2) <= 5):
                             if center['id'] in arucoIdArray:
                                 accurateFlag = True
                             else:
@@ -157,7 +157,7 @@ if __name__ == '__main__':
                   if(count == motor.maxStep):
                       break
             
-              if(backCenterPoint['id'] == arucoIdArray[0] and abs(backCenterPoint['x'] - width/2) <= 2):
+              if(backCenterPoint['id'] == arucoIdArray[0] and abs(backCenterPoint['x'] - width/2) <= 5):
                   print("less than two, move to next id")
                   break
 
