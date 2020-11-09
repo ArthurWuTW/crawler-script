@@ -25,6 +25,7 @@ while True:
     # Post data
     data = '/temperature/'+ temperature
     r = requests.get(ip+data)
+    r = requests.get(ip+'/writeLogMessage/TEMP/%5BCrawler%5D%20TEMP%20Data%20Updated/LOG')
   except ValueError:
     r = requests.get(ip+'/writeLogMessage/TEMP/%5BCrawler%5D%20TEMP%20Crawler%20Failed/WARNING')
   
@@ -33,6 +34,7 @@ while True:
     data = '/humidity/'+ humidity
     r = requests.get(ip+data)
     #time.sleep(60*30)
+    r = requests.get(ip+'/writeLogMessage/HUMID/%5BCrawler%5D%20HUMID%20Data%20Updated/LOG')
   except ValueError:
     r = requests.get(ip+'/writeLogMessage/HUMID/%5BCrawler%5D%20HUMID%20Crawler%20Failed/WARNING')
   
