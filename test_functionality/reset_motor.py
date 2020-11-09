@@ -57,14 +57,15 @@ class ArucoLibrary():
 
     def getCenterPoints(self, corners, ids):
         centerPoints = list()
-        for i in range(len(ids)):
-            c = corners[i][0]
-            if(len(c[:, 0]) == 4):
-                centerPoint = dict()
-                centerPoint['id'] = ids[i][0]
-                centerPoint['x'] = c[:, 0].mean()
-                centerPoint['y'] = c[:, 1].mean()
-                centerPoints.append(centerPoint)
+        if ids is not None and corners is not None:
+          for i in range(len(ids)):
+              c = corners[i][0]
+              if(len(c[:, 0]) == 4):
+                  centerPoint = dict()
+                  centerPoint['id'] = ids[i][0]
+                  centerPoint['x'] = c[:, 0].mean()
+                  centerPoint['y'] = c[:, 1].mean()
+                  centerPoints.append(centerPoint)
         return centerPoints
 
 if __name__ == '__main__':
@@ -88,7 +89,7 @@ if __name__ == '__main__':
 
             print(centerPointsArray)
 
-            if centerPointsArray is not None:
+            if centerPointsArray is not None and len(centerPointsArray)>0:
 
               for center in centerPointsArray:
                   if(center['id'] == 1):

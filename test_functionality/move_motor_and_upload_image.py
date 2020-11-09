@@ -58,7 +58,7 @@ class ArucoLibrary():
     def getCenterPoints(self, corners, ids):
         centerPoints = list()
         print(ids)
-        if ids is not None:
+        if ids is not None and corners is not None:
             for i in range(len(ids)):
                 c = corners[i][0]
                 if(len(c[:, 0]) == 4):
@@ -142,8 +142,10 @@ if __name__ == '__main__':
             _, width, _ = image.shape
             cornersArray, idsArray = arucoLib.detectArucoCorner(image)
             centerPointsArray = arucoLib.getCenterPoints(cornersArray, idsArray)
+            # if no aruco markers, getCenterPoints function return an empty array
             sortedCenterPointsArray = sorted(centerPointsArray, key=lambda k: k['id'])
-            if sortedCenterPointsArray is not None:
+            
+            if sortedCenterPointsArray is not None and len(sortedCenterPointsArray)>0:
               backCenterPoint = sortedCenterPointsArray[0]
               print(backCenterPoint['id'], backCenterPoint['x'], backCenterPoint['y'])
               if(backCenterPoint['x'] < width/2):
