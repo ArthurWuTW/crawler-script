@@ -19,16 +19,21 @@ while True:
   temperature = divs[0].string
 
   print(humidity, temperature)
-
-
-  # Post data
   ip = 'http://10.1.1.16:8000'
-  data = '/temperature/'+ temperature
-  r = requests.get(ip+data)
-
-  data = '/humidity/'+ humidity
-  r = requests.get(ip+data)
-
-  #time.sleep(60*30)
+  try:
+    check = float(temperature)
+    # Post data
+    data = '/temperature/'+ temperature
+    r = requests.get(ip+data)
+  except ValueError:
+    r = requests.get(ip+'/writeLogMessage/TEMP/%5BCrawler%5D%20TEMP%20Crawler%20Failed/WARNING')
+  
+  try:
+    check = float(humidity)
+    data = '/humidity/'+ humidity
+    r = requests.get(ip+data)
+    #time.sleep(60*30)
+  except ValueError:
+    r = requests.get(ip+'/writeLogMessage/HUMID/%5BCrawler%5D%20HUMID%20Crawler%20Failed/WARNING')
+  
   break
-
