@@ -22,6 +22,7 @@ while True:
 
     try:
         r = requests.get(ip+data)
+        r = requests.get(ip+"/writeLogMessage/CPU/%5BLOG%5D%20CPU%20Data%20Updated")
     except:
         pass
     break
