@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
- 
+import requests
 GPIO_PIN = 4
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(GPIO_PIN, GPIO.OUT)
