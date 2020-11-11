@@ -15,6 +15,7 @@ try:
         #time.sleep(5)
         ip = "http://10.1.1.16:8000"
         r = requests.get(ip+"/writeLogMessage/PUMP/%5BPUMP%5D%20Pump%20Watering%20Done/LOG")
+        r = requests.get(ip+"/updateWateringStatus/Done")
         break
 except KeyboardInterrupt:
     print('aaa')
