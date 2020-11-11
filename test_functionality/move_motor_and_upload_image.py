@@ -94,8 +94,18 @@ if __name__ == '__main__':
     arucoAllArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     arucoIdArray = [1, 3, 5, 7, 9, 11]
 
+    done_count = 0
+
+
     try:
         for id in arucoAllArray:
+
+            done_count += 1
+            r = requests.get("http://10.1.1.16:8000/updateCameraTask/"+str(int(done_count/float(len(arucoAllArray))*100))+"%25")
+
+
+
+
             moveCount = 0
             while True:
                 # TODO bugfix: error message - Corrupt JPEG data: 1 extraneous bytes before marker 0xd6
