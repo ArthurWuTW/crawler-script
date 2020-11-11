@@ -18,7 +18,7 @@ while True:
     print(temp)
 
     ip = "http://10.1.1.16:8000"
-    data = "/cpuTemperature/"+str(temp)
+    data = "/updatePiCpuTemperature/"+str(temp).replace(".", "%2E")+"%20%27C"
 
     try:
         r = requests.get(ip+data)
