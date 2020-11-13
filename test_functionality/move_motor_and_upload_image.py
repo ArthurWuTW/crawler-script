@@ -101,7 +101,7 @@ if __name__ == '__main__':
         for id in arucoAllArray:
 
             done_count += 1
-            r = requests.get("http://10.1.1.16:8000/updateCameraTask/"+str(int(done_count/float(len(arucoAllArray))*100))+"%25")
+            r = requests.get("http://10.1.1.2:8000/updateCameraTask/"+str(int(done_count/float(len(arucoAllArray))*100))+"%25")
 
 
 

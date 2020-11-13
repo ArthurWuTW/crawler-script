@@ -17,7 +17,7 @@ while True:
     temp, msg = check_CPU_temp()
     print(temp)
 
-    ip = "http://10.1.1.16:8000"
+    ip = "http://10.1.1.2:8000"
     data = "/updatePiCpuTemperature/"+str(temp).replace(".", "%2E")+"%20%27C"
 
     try:
