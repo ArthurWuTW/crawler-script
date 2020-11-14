@@ -88,7 +88,7 @@ if __name__ == '__main__':
     motor.stop()
     imageGrabber = ImageGrabber(0)
     arucoLib = ArucoLibrary()
-    ip = "http://10.1.1.16:8000/receiveImage"
+    ip = "http://10.1.1.2:8000/receiveImage"
     imagePoster = ImagePoster(ip)
 
     arucoAllArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
