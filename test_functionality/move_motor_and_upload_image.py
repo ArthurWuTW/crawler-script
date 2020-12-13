@@ -35,10 +35,14 @@ class Motor():
 class ImageGrabber():
     def __init__(self, id):
         self.grabber = cv2.VideoCapture(id)
+        self.grabber.set(3, 1280)
+        self.grabber.set(4, 960)
 
     def resetCapturingConfiguration(self, id):
         self.grabber = None
         self.grabber = cv2.VideoCapture(id)
+        self.grabber.set(3, 1280)
+        self.grabber.set(4, 960)
 
     def getImageFrame(self):
         _, frame = self.grabber.read()
@@ -82,6 +86,7 @@ class ImagePoster():
         }
         headers = {'content-type': 'application/json'}
         r = requests.post(self.url, data=json.dumps(data), headers=headers)
+        r = requests.get('http://10.1.1.2:8000/writeLogMessage/IMAGE/%5BImage%5D%20Id%20'+str(id)+'%20Uploaded/LOG')
 
 if __name__ == '__main__':
     motor = Motor(9, 10)
@@ -91,11 +96,13 @@ if __name__ == '__main__':
     ip = "http://10.1.1.2:8000/receiveImage"
     imagePoster = ImagePoster(ip)
 
-    arucoAllArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    arucoAllArray = [1, 3, 5, 7, 9, 11]
     arucoIdArray = [1, 3, 5, 7, 9, 11]
 
     done_count = 0
 
+    image3DConstructPoster = ImagePoster("http://10.1.1.2:8000/receive3dContructImage")
+    three_d_count = 0
 
     try:
         for id in arucoAllArray:
@@ -137,40 +144,55 @@ if __name__ == '__main__':
 
                 if(passFlag):
                     break
+                
 
                 if(accurateFlag):
                     imagePoster.postImageArucoid(image, id)
                     break
+                else:
+                    three_d_count += 1
+                    if(three_d_count%5==1):
+                        image3DConstructPoster.postImageArucoid(image, three_d_count) 
                 
                 if(moveCount == motor.maxStep):
                     raise Exception("reach MaxStep, system shutdown!")
         motor.maxStep = 50
         count = 0
         while True:
+            # TODO bugfix: error message - Corrupt JPEG data: 1 extraneous bytes before marker 0xd6
+            # reseting VideoCapture can fix it, but it slows down the whole process
             imageGrabber.resetCapturingConfiguration(0)
             image = imageGrabber.getImageFrame()
             _, width, _ = image.shape
             cornersArray, idsArray = arucoLib.detectArucoCorner(image)
             centerPointsArray = arucoLib.getCenterPoints(cornersArray, idsArray)
-            # if no aruco markers, getCenterPoints function return an empty array
-            sortedCenterPointsArray = sorted(centerPointsArray, key=lambda k: k['id'])
-            
-            if sortedCenterPointsArray is not None and len(sortedCenterPointsArray)>0:
-              backCenterPoint = sortedCenterPointsArray[0]
-              print(backCenterPoint['id'], backCenterPoint['x'], backCenterPoint['y'])
-              if(backCenterPoint['x'] < width/2):
-                  motor.backward(0.6)
-              elif(backCenterPoint['x'] > width/2):
-                  motor.forward(0.6)
 
-              if(backCenterPoint['id'] == arucoIdArray[0]):
-                  count += 1
-                  print(count)
-                  if(count == motor.maxStep):
+            accurateFlag = False
+            detectFirstIdFlag = False
+
+            print(centerPointsArray)
+
+            if centerPointsArray is not None and len(centerPointsArray)>0:
+
+              for center in centerPointsArray:
+                  if(center['id'] == 1):
+                      detectFirstIdFlag = True
+                      print(center['x'], center['y'])
+                      if(center['x'] < width/2):
+                          motor.backward(0.6)
+                      elif(center['x'] > width/2):
+                          motor.forward(0.6)
+
+                      if(abs(center['x'] - width/2) <= 20):
+                          accurateFlag = True
+                        
                       break
-            
-              if(backCenterPoint['id'] == arucoIdArray[0] and abs(backCenterPoint['x'] - width/2) <= 5):
-                  print("less than two, move to next id")
+
+              if(detectFirstIdFlag == False):
+                  print("move backward")
+                  motor.backward(0.6)
+
+              if(accurateFlag):
                   break
 
 

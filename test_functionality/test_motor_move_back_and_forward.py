@@ -35,14 +35,10 @@ class Motor():
 class ImageGrabber():
     def __init__(self, id):
         self.grabber = cv2.VideoCapture(id)
-        self.grabber.set(3, 1280)
-        self.grabber.set(4, 960)
 
     def resetCapturingConfiguration(self, id):
         self.grabber = None
         self.grabber = cv2.VideoCapture(id)
-        self.grabber.set(3, 1280)
-        self.grabber.set(4, 960)
 
     def getImageFrame(self):
         _, frame = self.grabber.read()
@@ -91,30 +87,8 @@ if __name__ == '__main__':
             accurateFlag = False
             detectFirstIdFlag = False
 
-            print(centerPointsArray)
-
-            if centerPointsArray is not None and len(centerPointsArray)>0:
-
-              for center in centerPointsArray:
-                  if(center['id'] == 1):
-                      detectFirstIdFlag = True
-                      print(center['x'], center['y'])
-                      if(center['x'] < width/2):
-                          motor.backward(0.6)
-                      elif(center['x'] > width/2):
-                          motor.forward(0.6)
-
-                      if(abs(center['x'] - width/2) <= 20):
-                          accurateFlag = True
-                        
-                      break
-
-              if(detectFirstIdFlag == False):
-                  print("move backward")
-                  motor.backward(0.6)
-
-              if(accurateFlag):
-                  break
+            motor.backward(50)
+            motor.forward(50)
 
 
     except KeyboardInterrupt:
