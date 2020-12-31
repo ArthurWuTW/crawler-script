@@ -127,7 +127,15 @@ if __name__ == '__main__':
         for id in arucoAllArray:
 
             done_count += 1
-            r = requests.get("https://plantmonitor.mooo.com/updateCameraTask/"+str(int(done_count/float(len(arucoAllArray))*100))+"%25")
+            # Post data
+            data = {
+                    'raspberry_secret_key': secret_data['raspberry_secret_key'],
+                    'status': str(int(done_count/float(len(arucoAllArray))*100))+"%" 
+            }
+            print(data)
+            headers = {'content-type': 'application/json'}
+            r = requests.post("https://plantmonitor.mooo.com/updateCameraTask", data=json.dumps(data), headers=headers)
+            #r = requests.get("https://plantmonitor.mooo.com/updateCameraTask/"+str(int(done_count/float(len(arucoAllArray))*100))+"%25")
 
 
 

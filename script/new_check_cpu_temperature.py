@@ -1,6 +1,15 @@
 import re, subprocess
 import requests
 import time
+import os
+import json
+
+secret_data_path = os.path.dirname(os.path.abspath(__file__))+"/secret_data.json"
+secret_data = None
+with open(secret_data_path, "r") as file:
+    secret_data = json.load(file)
+print(secret_data)
+
 
 def check_CPU_temp():
     temp = None
@@ -18,11 +27,17 @@ while True:
     print(temp)
 
     ip = "https://plantmonitor.mooo.com"
-    data = "/updatePiCpuTemperature/"+str(temp).replace(".", "%2E")+"%20%27C"
+    #data = "/updatePiCpuTemperature/"+str(temp).replace(".", "%2E")+"%20%2a7C"
 
     try:
-        r = requests.get(ip+data)
-        #r = requests.get(ip+"/writeLogMessage/CPU/%5BPI%5D%20CPU%20Temp%20Updated/LOG")
+        # Post data
+        data = {
+                'raspberry_secret_key': secret_data['raspberry_secret_key'],
+                'status': str(temp)+" 'C"
+        }
+        print(data)
+        headers = {'content-type': 'application/json'}
+        r = requests.post(ip+'/updatePiCpuTemperature', data=json.dumps(data), headers=headers)
     except:
         pass
     

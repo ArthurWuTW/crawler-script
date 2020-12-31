@@ -31,7 +31,13 @@ try:
         }
         headers = {'content-type': 'application/json'}
         r = requests.post(ip+'/writeLogMessage', data=json.dumps(data), headers=headers)
-        r = requests.get(ip+"/updateWateringStatus/Done")
+        data = {
+                'raspberry_secret_key': secret_data['raspberry_secret_key'],
+                'status': "Done"
+        }
+        headers = {'content-type': 'application/json'}
+        r = requests.post('https://plantmonitor.mooo.com/updateWateringStatus', data=json.dumps(data), headers=headers)
+        #r = requests.get(ip+"/updateWateringStatus/Done")
         break
 except KeyboardInterrupt:
     print('aaa')
