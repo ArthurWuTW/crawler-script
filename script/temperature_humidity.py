@@ -19,7 +19,7 @@ while True:
   temperature = divs[0].string
 
   print(humidity, temperature)
-  ip = 'http://10.1.1.2:8000'
+  ip = 'https://plantmonitor.mooo.com'
   try:
     check = float(temperature)
     # Post data

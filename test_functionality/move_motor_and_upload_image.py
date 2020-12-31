@@ -86,14 +86,14 @@ class ImagePoster():
         }
         headers = {'content-type': 'application/json'}
         r = requests.post(self.url, data=json.dumps(data), headers=headers)
-        r = requests.get('http://10.1.1.2:8000/writeLogMessage/IMAGE/%5BImage%5D%20Id%20'+str(id)+'%20Uploaded/LOG')
+        r = requests.get('https://plantmonitor.mooo.com/writeLogMessage/IMAGE/%5BImage%5D%20Id%20'+str(id)+'%20Uploaded/LOG')
 
 if __name__ == '__main__':
     motor = Motor(9, 10)
     motor.stop()
     imageGrabber = ImageGrabber(0)
     arucoLib = ArucoLibrary()
-    ip = "http://10.1.1.2:8000/receiveImage"
+    ip = "https://plantmonitor.mooo.com/receiveImage"
     imagePoster = ImagePoster(ip)
 
     arucoAllArray = [1, 3, 5, 7, 9, 11]
@@ -101,14 +101,14 @@ if __name__ == '__main__':
 
     done_count = 0
 
-    image3DConstructPoster = ImagePoster("http://10.1.1.2:8000/receive3dContructImage")
+    image3DConstructPoster = ImagePoster("https://plantmonitor.mooo.com/receive3dContructImage")
     three_d_count = 0
 
     try:
         for id in arucoAllArray:
 
             done_count += 1
-            r = requests.get("http://10.1.1.2:8000/updateCameraTask/"+str(int(done_count/float(len(arucoAllArray))*100))+"%25")
+            r = requests.get("https://plantmonitor.mooo.com/updateCameraTask/"+str(int(done_count/float(len(arucoAllArray))*100))+"%25")
 
 
 
@@ -125,6 +125,7 @@ if __name__ == '__main__':
 
                 accurateFlag = False
                 passFlag = False
+                moveFlag = False
 
                 for center in centerPointsArray:
                     if(center['id'] == id):
@@ -132,8 +133,10 @@ if __name__ == '__main__':
                         moveCount += 1
                         if(center['x'] < width/2):
                             motor.backward(0.6)
+                            moveFlag = True
                         elif(center['x'] > width/2):
                             motor.forward(0.6)
+                            moveFlag = True
 
                         if(abs(center['x'] - width/2) <= 5):
                             if center['id'] in arucoIdArray:
@@ -149,7 +152,7 @@ if __name__ == '__main__':
                 if(accurateFlag):
                     imagePoster.postImageArucoid(image, id)
                     break
-                else:
+                elif(moveFlag):
                     three_d_count += 1
                     if(three_d_count%5==1):
                         image3DConstructPoster.postImageArucoid(image, three_d_count) 
