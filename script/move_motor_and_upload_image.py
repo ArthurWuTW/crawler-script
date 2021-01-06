@@ -224,6 +224,14 @@ if __name__ == '__main__':
 
               if(accurateFlag):
                   break
+        # finish the job
+        # send do recontruction hint
+        data = {
+            'raspberry_secret_key': secret_data['raspberry_secret_key']
+        }
+        print(data)
+        headers = {'content-type': 'application/json'}
+        r = requests.post("https://plantmonitor.mooo.com/passDoReconsturctionHint", data=json.dumps(data), headers=headers)
 
 
     except KeyboardInterrupt:
